@@ -71,15 +71,8 @@ Razorpay Webhooks
 
 ```bash
 cd backend
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate     # Windows
-pip install -r requirements.txt
 
-# Set environment variables
-cp .env.example .env
-# Edit .env with DB and Razorpay credentials
-
+pip install -r sqlachemy flastapi
 # Initialize Database
 python init_db.py
 
