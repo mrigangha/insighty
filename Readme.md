@@ -12,8 +12,9 @@
 
 > Add a live demo link or GIF/screenshots here
 
-![Dashboard Screenshot](./assets/1.png)
+![Dashboard Screenshot](./assets/3.png)
 ![Default Screenshot](./assets/2.png)
+![Default Screenshot](./assets/1.png)
 
 ---
 
@@ -71,15 +72,8 @@ Razorpay Webhooks
 
 ```bash
 cd backend
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate     # Windows
-pip install -r requirements.txt
 
-# Set environment variables
-cp .env.example .env
-# Edit .env with DB and Razorpay credentials
-
+pip install -r sqlachemy fastapi
 # Initialize Database
 python init_db.py
 
