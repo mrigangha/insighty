@@ -72,7 +72,7 @@ Razorpay Webhooks
 ```bash
 cd backend
 
-pip install -r sqlachemy flastapi
+pip install -r sqlachemy fastapi
 # Initialize Database
 python init_db.py
 
