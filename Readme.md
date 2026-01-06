@@ -15,7 +15,7 @@
 ![Dashboard Screenshot](./assets/3.png)
 ![Default Screenshot](./assets/2.png)
 ![Default Screenshot](./assets/1.png)
-
+![Default Screenshot](./assets/4.png)
 ---
 
 ## Key Features
