@@ -1,0 +1,1 @@
+Built a privacy-focused website analytics platform that tracks anonymous visitor sessions and performs identity stitching to link sessions with converted leads, enabling full customer journey visibility

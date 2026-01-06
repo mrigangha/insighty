@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Foodler - Delicious Delivered</title>
+
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
+
+        <style>
+            body {
+                font-family: "Poppins", sans-serif;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            /* Smooth fade transition */
+            .fade-in {
+                animation: fadeIn 0.4s ease-out forwards;
+                opacity: 0;
+            }
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            /* Active Tab Styling */
+            .tab-active {
+                background-color: #f97316 !important;
+                color: white !important;
+            }
+        </style>
+        <script
+            src="./insighty.js"
+            data-tracking-key="trk_959648bd0fda"
+        ></script>
+    </head>
+    <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+        <nav
+            class="fixed w-full z-50 bg-white/95 backdrop-blur-md shadow-sm transition-all duration-300"
+        >
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-20 items-center">
+                    <a href="#/" class="flex items-center gap-2 group">
+                        <div
+                            class="bg-orange-500 text-white p-2 rounded-xl group-hover:rotate-12 transition-transform shadow-lg shadow-orange-500/30"
+                        >
+                            <i class="fas fa-hamburger text-xl"></i>
+                        </div>
+                        <span
+                            class="font-bold text-2xl tracking-tight text-gray-900"
+                            >Foodler<span class="text-orange-500">.</span></span
+                        >
+                    </a>
+
+                    <div class="hidden md:flex items-center space-x-8">
+                        <a
+                            href="#/"
+                            class="nav-link font-medium hover:text-orange-500 transition-colors"
+                            data-path="/"
+                            >Home</a
+                        >
+                        <a
+                            href="#/menu"
+                            class="nav-link font-medium hover:text-orange-500 transition-colors"
+                            data-path="/menu"
+                            >Menu</a
+                        >
+                        <a
+                            href="#/orders"
+                            class="nav-link font-medium hover:text-orange-500 transition-colors"
+                            data-path="/orders"
+                            >History</a
+                        >
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <a
+                            href="#/cart"
+                            class="relative p-3 hover:bg-orange-50 rounded-full transition-colors group"
+                        >
+                            <i
+                                class="fas fa-shopping-bag text-xl text-gray-600 group-hover:text-orange-600"
+                            ></i>
+                            <span
+                                id="cart-count"
+                                class="absolute top-1 right-1 bg-orange-500 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full transform scale-0 transition-transform duration-200 border-2 border-white"
+                                >0</span
+                            >
+                        </a>
+                        <button
+                            id="mobile-menu-btn"
+                            class="md:hidden p-2 text-gray-600 hover:text-orange-500 focus:outline-none"
+                        >
+                            <i class="fas fa-bars text-2xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                id="mobile-menu"
+                class="hidden md:hidden bg-white border-t absolute w-full left-0 top-20 shadow-xl"
+            >
+                <div class="px-4 pt-2 pb-6 space-y-2">
+                    <a
+                        href="#/"
+                        class="block px-4 py-3 rounded-lg text-base font-medium hover:bg-orange-50 hover:text-orange-600 transition-colors"
+                        onclick="toggleMobileMenu()"
+                        >Home</a
+                    >
+                    <a
+                        href="#/menu"
+                        class="block px-4 py-3 rounded-lg text-base font-medium hover:bg-orange-50 hover:text-orange-600 transition-colors"
+                        onclick="toggleMobileMenu()"
+                        >Menu</a
+                    >
+                    <a
+                        href="#/orders"
+                        class="block px-4 py-3 rounded-lg text-base font-medium hover:bg-orange-50 hover:text-orange-600 transition-colors"
+                        onclick="toggleMobileMenu()"
+                        >Order History</a
+                    >
+                    <a
+                        href="#/cart"
+                        class="block px-4 py-3 rounded-lg text-base font-medium hover:bg-orange-50 hover:text-orange-600 transition-colors"
+                        onclick="toggleMobileMenu()"
+                        >My Cart</a
+                    >
+                </div>
+            </div>
+        </nav>
+
+        <main id="app" class="flex-grow pt-20"></main>
+
+        <footer class="bg-gray-900 text-white pt-12 pb-8 mt-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div
+                    class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 border-b border-gray-800 pb-8"
+                >
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4">Foodler.</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            Delivering happiness (and calories) to your doorstep
+                            within minutes. Fresh, hot, and insanely tasty.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold mb-4 text-orange-500">
+                            Quick Links
+                        </h4>
+                        <ul class="text-gray-400 text-sm space-y-2">
+                            <li>
+                                <a
+                                    href="#/menu"
+                                    class="hover:text-white transition-colors"
+                                    >Order Food</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="#/orders"
+                                    class="hover:text-white transition-colors"
+                                    >My History</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="#/cart"
+                                    class="hover:text-white transition-colors"
+                                    >View Cart</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold mb-4 text-orange-500">Contact</h4>
+                        <p class="text-gray-400 text-sm mb-2">
+                            <i class="fas fa-map-marker-alt w-6"></i> 123 Flavor
+                            Street, Tasty City
+                        </p>
+                        <p class="text-gray-400 text-sm">
+                            <i class="fas fa-envelope w-6"></i>
+                            support@foodler.com
+                        </p>
+                    </div>
+                </div>
+                <div class="text-center text-gray-500 text-sm">
+                    &copy; 2024 Foodler Inc. All rights reserved.
+                </div>
+            </div>
+        </footer>
+
+        <script>
+            // --- DATA STORE ---
+            const products = [
+                {
+                    id: 1,
+                    name: "Truffle Burger",
+                    category: "burger",
+                    price: 12.99,
+                    rating: 4.8,
+                    time: "25 min",
+                    img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80",
+                },
+                {
+                    id: 2,
+                    name: "Double Cheese",
+                    category: "burger",
+                    price: 10.5,
+                    rating: 4.6,
+                    time: "20 min",
+                    img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=600&q=80",
+                },
+                {
+                    id: 3,
+                    name: "Margherita Pizza",
+                    category: "pizza",
+                    price: 14.5,
+                    rating: 4.5,
+                    time: "30 min",
+                    img: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=600&q=80",
+                },
+                {
+                    id: 4,
+                    name: "Pepperoni Feast",
+                    category: "pizza",
+                    price: 16.0,
+                    rating: 4.7,
+                    time: "35 min",
+                    img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=600&q=80",
+                },
+                {
+                    id: 5,
+                    name: "Dragon Roll",
+                    category: "asian",
+                    price: 22.0,
+                    rating: 4.9,
+                    time: "40 min",
+                    img: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=600&q=80",
+                },
+                {
+                    id: 6,
+                    name: "Pad Thai",
+                    category: "asian",
+                    price: 13.5,
+                    rating: 4.7,
+                    time: "25 min",
+                    img: "https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=600&q=80",
+                },
+                {
+                    id: 7,
+                    name: "Spicy Ramen",
+                    category: "asian",
+                    price: 15.0,
+                    rating: 4.8,
+                    time: "20 min",
+                    img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80",
+                },
+                {
+                    id: 8,
+                    name: "Caesar Salad",
+                    category: "healthy",
+                    price: 9.99,
+                    rating: 4.3,
+                    time: "15 min",
+                    img: "https://images.unsplash.com/photo-1550304943-4f24f54ddde9?auto=format&fit=crop&w=600&q=80",
+                },
+            ];
+
+            // --- STATE MANAGEMENT ---
+            const state = {
+                cart: JSON.parse(localStorage.getItem("foodler_cart")) || [],
+                orders:
+                    JSON.parse(localStorage.getItem("foodler_orders")) || [],
+                activeCategory: "all",
+            };
+
+            // --- CORE FUNCTIONS ---
+
+            function saveState() {
+                localStorage.setItem(
+                    "foodler_cart",
+                    JSON.stringify(state.cart),
+                );
+                localStorage.setItem(
+                    "foodler_orders",
+                    JSON.stringify(state.orders),
+                );
+                updateCartBadge();
+            }
+
+            // --- ROUTER ---
+            const router = () => {
+                const app = document.getElementById("app");
+                const hash = window.location.hash || "#/";
+
+                window.scrollTo(0, 0);
+
+                let content = "";
+
+                if (hash === "#/") content = renderHome();
+                else if (hash === "#/menu") content = renderMenu();
+                else if (hash === "#/cart") content = renderCart();
+                else if (hash === "#/orders") content = renderOrderHistory();
+                else if (hash === "#/success") content = renderSuccess();
+                else content = renderHome();
+
+                app.innerHTML = `<div class="fade-in">${content}</div>`;
+
+                // Post-render logic
+                if (hash === "#/menu") filterMenu(state.activeCategory); // Restore active filter
+                updateNavState(hash);
+            };
+
+            window.addEventListener("hashchange", router);
+            window.addEventListener("load", () => {
+                router();
+                updateCartBadge();
+            });
+
+            // --- VIEWS ---
+
+            function renderHome() {
+                return `
+                <section class="bg-orange-50 min-h-[90vh] flex items-center relative overflow-hidden">
+                    <div class="absolute -top-20 -right-20 w-96 h-96 bg-orange-200 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-0 w-full z-10">
+                        <div class="grid lg:grid-cols-2 gap-12 items-center">
+                            <div class="space-y-6 text-center lg:text-left">
+                                <span class="inline-block bg-orange-100 text-orange-600 px-4 py-1 rounded-full text-sm font-bold tracking-wide animate-pulse">
+                                    🚀 Fastest Delivery in Town
+                                </span>
+                                <h1 class="text-5xl lg:text-7xl font-bold leading-tight text-gray-900">
+                                    Craving it? <br>
+                                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">We've got it.</span>
+                                </h1>
+                                <p class="text-lg text-gray-600 max-w-lg mx-auto lg:mx-0">
+                                    Order from top restaurants and get delicious meals delivered to your doorstep. Fresh, fast, and now with order tracking.
+                                </p>
+                                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                                    <a href="#/menu" onclick="navigateToCategory('all')" class="px-8 py-4 bg-orange-500 text-white font-bold rounded-2xl shadow-lg shadow-orange-500/30 hover:bg-orange-600 hover:-translate-y-1 transition-all">
+                                        Order Now
+                                    </a>
+                                    <a href="#/orders" class="px-8 py-4 bg-white text-gray-700 font-bold rounded-2xl shadow-md hover:bg-gray-50 hover:-translate-y-1 transition-all">
+                                        View History
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="relative mt-8 lg:mt-0">
+                                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80" alt="Hero Food" class="rounded-3xl shadow-2xl transform rotate-2 hover:rotate-0 transition-duration-500 w-full object-cover h-[400px] lg:h-[500px]">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="py-20 bg-white">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="text-center mb-12">
+                            <h2 class="text-3xl font-bold mb-2">Categories</h2>
+                            <p class="text-gray-500">What are you in the mood for?</p>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                            ${["Burger", "Pizza", "Asian", "Healthy"]
+                                .map(
+                                    (cat) => `
+                                <div onclick="navigateToCategory('${cat.toLowerCase()}')" class="cursor-pointer bg-gray-50 p-6 rounded-2xl hover:shadow-lg hover:bg-orange-50 transition-all text-center group border border-gray-100">
+                                    <div class="w-16 h-16 bg-white rounded-full mx-auto flex items-center justify-center mb-4 text-2xl shadow-sm group-hover:scale-110 transition-transform">
+                                        ${getIcon(cat.toLowerCase())}
+                                    </div>
+                                    <h3 class="font-bold text-gray-800 group-hover:text-orange-600">${cat}</h3>
+                                </div>
+                            `,
+                                )
+                                .join("")}
+                        </div>
+                    </div>
+                </section>
+            `;
+            }
+
+            function renderMenu() {
+                return `
+                <section class="py-8 bg-gray-50 min-h-screen">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="text-center mb-10">
+                            <h2 class="text-3xl font-bold text-gray-900">Our Menu</h2>
+                        </div>
+
+                        <div class="flex flex-wrap justify-center gap-3 mb-10 sticky top-24 z-30 py-2 bg-gray-50/95 backdrop-blur-sm w-full">
+                            <button onclick="filterMenu('all')" id="btn-all" class="filter-btn px-6 py-2 bg-white text-gray-600 rounded-full font-medium shadow-sm border hover:bg-orange-50 transition-colors">All</button>
+                            <button onclick="filterMenu('burger')" id="btn-burger" class="filter-btn px-6 py-2 bg-white text-gray-600 rounded-full font-medium shadow-sm border hover:bg-orange-50 transition-colors">Burgers</button>
+                            <button onclick="filterMenu('pizza')" id="btn-pizza" class="filter-btn px-6 py-2 bg-white text-gray-600 rounded-full font-medium shadow-sm border hover:bg-orange-50 transition-colors">Pizza</button>
+                            <button onclick="filterMenu('asian')" id="btn-asian" class="filter-btn px-6 py-2 bg-white text-gray-600 rounded-full font-medium shadow-sm border hover:bg-orange-50 transition-colors">Asian</button>
+                            <button onclick="filterMenu('healthy')" id="btn-healthy" class="filter-btn px-6 py-2 bg-white text-gray-600 rounded-full font-medium shadow-sm border hover:bg-orange-50 transition-colors">Healthy</button>
+                        </div>
+
+                        <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            </div>
+                    </div>
+                </section>
+            `;
+            }
+
+            function renderCart() {
+                if (state.cart.length === 0) {
+                    return `
+                    <div class="min-h-[70vh] flex flex-col items-center justify-center text-center px-4">
+                        <i class="fas fa-shopping-basket text-6xl text-gray-200 mb-6"></i>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Cart Empty</h2>
+                        <p class="text-gray-500 mb-8">Good food is waiting for you.</p>
+                        <a href="#/menu" class="px-8 py-3 bg-orange-500 text-white rounded-xl font-bold hover:bg-orange-600 transition-colors shadow-lg">Go to Menu</a>
+                    </div>
+                `;
+                }
+
+                const total = state.cart.reduce(
+                    (sum, item) => sum + item.price * item.qty,
+                    0,
+                );
+
+                return `
+                <section class="py-8 bg-gray-50 min-h-screen">
+                    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+                        <h2 class="text-2xl font-bold mb-6">Your Order</h2>
+
+                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                            ${state.cart
+                                .map(
+                                    (item) => `
+                                <div class="p-4 flex items-center gap-4 border-b last:border-0">
+                                    <img src="${item.img}" class="w-16 h-16 rounded-lg object-cover bg-gray-100">
+                                    <div class="flex-grow">
+                                        <h3 class="font-bold text-gray-900">${item.name}</h3>
+                                        <p class="text-gray-500 text-sm">$${item.price.toFixed(2)}</p>
+                                    </div>
+                                    <div class="flex items-center gap-3 bg-gray-50 rounded-lg p-1">
+                                        <button onclick="updateQty(${item.id}, -1)" class="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-red-500"><i class="fas fa-minus text-xs"></i></button>
+                                        <span class="font-bold text-sm w-4 text-center">${item.qty}</span>
+                                        <button onclick="updateQty(${item.id}, 1)" class="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-green-500"><i class="fas fa-plus text-xs"></i></button>
+                                    </div>
+                                </div>
+                            `,
+                                )
+                                .join("")}
+                        </div>
+
+                        <div class="mt-6 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                            <div class="flex justify-between mb-2 text-gray-600">
+                                <span>Subtotal</span>
+                                <span>$${total.toFixed(2)}</span>
+                            </div>
+                            <div class="flex justify-between mb-4 text-gray-600">
+                                <span>Delivery Fee</span>
+                                <span>$2.99</span>
+                            </div>
+                            <div class="border-t pt-4 flex justify-between font-bold text-xl text-gray-900 mb-6">
+                                <span>Total</span>
+                                <span>$${(total + 2.99).toFixed(2)}</span>
+                            </div>
+                            <button onclick="processCheckout()" class="w-full py-4 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-600 shadow-lg shadow-orange-500/30 transition-transform active:scale-95">
+                                Place Order
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            `;
+            }
+
+            function renderOrderHistory() {
+                if (state.orders.length === 0) {
+                    return `
+                    <div class="min-h-[70vh] flex flex-col items-center justify-center text-center px-4">
+                        <i class="fas fa-history text-6xl text-gray-200 mb-6"></i>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">No Past Orders</h2>
+                        <p class="text-gray-500 mb-8">You haven't ordered anything yet.</p>
+                        <a href="#/menu" class="px-8 py-3 bg-orange-500 text-white rounded-xl font-bold shadow-lg">Order Now</a>
+                    </div>
+                `;
+                }
+
+                return `
+                <section class="py-8 bg-gray-50 min-h-screen">
+                    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+                        <h2 class="text-2xl font-bold mb-6">Order History</h2>
+                        <div class="space-y-6">
+                            ${state.orders
+                                .slice()
+                                .reverse()
+                                .map(
+                                    (order) => `
+                                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                                    <div class="flex justify-between items-start mb-4 border-b pb-4">
+                                        <div>
+                                            <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Order #${order.id}</span>
+                                            <p class="text-sm text-gray-600">${new Date(order.date).toLocaleString()}</p>
+                                        </div>
+                                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">
+                                            Completed
+                                        </span>
+                                    </div>
+                                    <div class="space-y-2 mb-4">
+                                        ${order.items
+                                            .map(
+                                                (i) => `
+                                            <div class="flex justify-between text-sm">
+                                                <span class="text-gray-600">${i.qty}x ${i.name}</span>
+                                                <span class="font-medium">$${(i.price * i.qty).toFixed(2)}</span>
+                                            </div>
+                                        `,
+                                            )
+                                            .join("")}
+                                    </div>
+                                    <div class="flex justify-between items-center pt-2 border-t mt-2">
+                                        <span class="font-bold text-gray-900">Total Paid</span>
+                                        <span class="font-bold text-orange-600 text-lg">$${order.total.toFixed(2)}</span>
+                                    </div>
+                                </div>
+                            `,
+                                )
+                                .join("")}
+                        </div>
+                    </div>
+                </section>
+            `;
+            }
+
+            function renderSuccess() {
+                return `
+                <div class="min-h-[80vh] flex flex-col items-center justify-center text-center px-4">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6 animate-bounce">
+                        <i class="fas fa-check text-4xl text-green-500"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Order Confirmed!</h2>
+                    <p class="text-gray-500 mb-8 max-w-sm">Your delicious food is being prepared. You can track it in your history.</p>
+                    <div class="flex gap-4">
+                        <a href="#/orders" class="px-6 py-3 bg-gray-900 text-white rounded-xl font-bold shadow-lg">View Order</a>
+                        <a href="#/" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50">Home</a>
+                    </div>
+                </div>
+            `;
+            }
+
+            // --- INTERACTIVITY ---
+
+            function getIcon(cat) {
+                const icons = {
+                    burger: "🍔",
+                    pizza: "🍕",
+                    asian: "🍜",
+                    healthy: "🥗",
+                };
+                return icons[cat] || "🍽️";
+            }
+
+            function navigateToCategory(cat) {
+                state.activeCategory = cat;
+                window.location.hash = "#/menu";
+            }
+
+            function filterMenu(category) {
+                state.activeCategory = category;
+
+                // Visual Tab Update
+                document
+                    .querySelectorAll(".filter-btn")
+                    .forEach((btn) =>
+                        btn.classList.remove(
+                            "tab-active",
+                            "border-transparent",
+                        ),
+                    );
+                const activeBtn = document.getElementById(`btn-${category}`);
+                if (activeBtn) {
+                    activeBtn.classList.add("tab-active", "border-transparent");
+                }
+
+                // Filter Logic
+                const filtered =
+                    category === "all"
+                        ? products
+                        : products.filter((p) => p.category === category);
+
+                // Render Grid
+                const grid = document.getElementById("product-grid");
+                if (grid) {
+                    grid.innerHTML = filtered
+                        .map(
+                            (p) => `
+                    <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group flex flex-col">
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute bottom-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-xs font-bold text-gray-800 shadow-sm">
+                                ${p.time}
+                            </div>
+                        </div>
+                        <div class="p-5 flex flex-col flex-grow">
+                            <div class="flex justify-between items-start mb-1">
+                                <h3 class="font-bold text-gray-900 text-lg leading-tight">${p.name}</h3>
+                                <div class="flex items-center text-xs font-bold bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded">
+                                    <i class="fas fa-star mr-1 text-[10px]"></i>${p.rating}
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-500 uppercase tracking-wide font-semibold mb-4 text-orange-400">${p.category}</p>
+                            <div class="mt-auto flex items-center justify-between">
+                                <span class="text-xl font-bold text-gray-900">$${p.price.toFixed(2)}</span>
+                                <button onclick="addToCart(${p.id})" class="w-10 h-10 rounded-full bg-gray-900 text-white flex items-center justify-center hover:bg-orange-500 transition-colors shadow-lg active:scale-90">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                        )
+                        .join("");
+                }
+            }
+
+            function addToCart(id) {
+                const product = products.find((p) => p.id === id);
+                const exists = state.cart.find((item) => item.id === id);
+
+                if (exists) exists.qty++;
+                else state.cart.push({ ...product, qty: 1 });
+
+                saveState();
+                showToast(`Added ${product.name}`);
+            }
+
+            function updateQty(id, change) {
+                const item = state.cart.find((i) => i.id === id);
+                if (item) {
+                    item.qty += change;
+                    if (item.qty <= 0)
+                        state.cart = state.cart.filter((i) => i.id !== id);
+                    saveState();
+
+                    // Re-render cart if on cart page to show updates
+                    if (window.location.hash === "#/cart") {
+                        document.getElementById("app").innerHTML =
+                            `<div class="fade-in">${renderCart()}</div>`;
+                    }
+                }
+            }
+
+            function processCheckout() {
+                if (state.cart.length === 0) return;
+
+                const total =
+                    state.cart.reduce((sum, i) => sum + i.price * i.qty, 0) +
+                    2.99;
+
+                const order = {
+                    id: Math.floor(100000 + Math.random() * 900000), // Random 6 digit ID
+                    date: new Date().toISOString(),
+                    items: [...state.cart],
+                    total: total,
+                };
+
+                state.orders.push(order);
+                state.cart = []; // Clear cart
+                saveState();
+
+                window.location.hash = "#/success";
+            }
+
+            function updateCartBadge() {
+                const count = state.cart.reduce(
+                    (sum, item) => sum + item.qty,
+                    0,
+                );
+                const badge = document.getElementById("cart-count");
+                if (badge) {
+                    badge.innerText = count;
+                    badge.classList.toggle("scale-0", count === 0);
+                }
+            }
+
+            function updateNavState(hash) {
+                document.querySelectorAll(".nav-link").forEach((link) => {
+                    const path = link.getAttribute("data-path");
+                    const cleanHash = hash.replace("#", "");
+                    // Simple logic: if hash is empty it's home, else check match
+                    if (
+                        (cleanHash === "/" && path === "/") ||
+                        (cleanHash.startsWith(path) && path !== "/")
+                    ) {
+                        link.classList.add("text-orange-500");
+                    } else {
+                        link.classList.remove("text-orange-500");
+                    }
+                });
+            }
+
+            // --- UTILS ---
+
+            function toggleMobileMenu() {
+                document
+                    .getElementById("mobile-menu")
+                    .classList.toggle("hidden");
+            }
+
+            function showToast(msg) {
+                const toast = document.createElement("div");
+                toast.className =
+                    "fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-gray-900/90 backdrop-blur text-white px-6 py-3 rounded-full shadow-xl z-50 text-sm font-medium flex items-center gap-3 animate-bounce";
+                toast.innerHTML = `<i class="fas fa-check-circle text-orange-500"></i> ${msg}`;
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 2000);
+            }
+
+            document
+                .getElementById("mobile-menu-btn")
+                .addEventListener("click", toggleMobileMenu);
+        </script>
+    </body>
+</html>
