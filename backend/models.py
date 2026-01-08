@@ -26,6 +26,7 @@ class User(Base):
     )
     payment_id = Column(String, nullable=True)
     order_id = Column(String, nullable=True)
+    payment_status = Column(String, nullable=True, default="not_started")
 
 
 class Project(Base):

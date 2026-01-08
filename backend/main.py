@@ -498,6 +498,13 @@ def create_project(
 
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+    no_of_projects = (
+        db.query(models.Project).filter(models.Project.user_id == user_id).count()
+    )
+    if user.pricing_tier == "Free" and no_of_projects >= 3:
+        raise HTTPException(status_code=403, detail="Max projects reached")
+    elif user.pricing_tier == "Basic" and no_of_projects >= 10:
+        raise HTTPException(status_code=403, detail="Max projects reached")
     project = models.Project(
         name=data.name,
         domain=data.domain,
