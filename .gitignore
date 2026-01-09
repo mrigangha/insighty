@@ -1,0 +1,20 @@
+# Secrets (CRITICAL!)
+.env
+.env.local
+.env.production
+*.key
+secrets.json
+
+# Dependencies
+/my-svelte-app/node_modules/
+venv/
+/backend/__pycache__/
+
+# Build outputs
+dist/
+build/
+.svelte-kit/
+
+# Database
+*.db
+*.sqlite
