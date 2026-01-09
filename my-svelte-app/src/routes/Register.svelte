@@ -82,7 +82,6 @@
                 isLoading = true;
                 const fd = new FormData(e.target);
                 const data = Object.fromEntries(fd.entries());
-                console.log(data);
 
                 try {
                     const res = await fetch(`${URL}/register`, {
@@ -115,7 +114,6 @@
                                     }),
                                 });
                                 const d = await res.json();
-                                console.log(d);
                                 access_token = d.access_token;
                                 let order = {
                                     amount: pricingPlans[data.pricing],
@@ -135,7 +133,6 @@
                                     },
                                 );
                                 const info = await resp.json();
-                                console.log(info);
                                 const options = {
                                     key: "rzp_test_RznNlAeuXL0d3K", // Your test key
                                     amount: order.amount,

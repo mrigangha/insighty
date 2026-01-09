@@ -39,7 +39,6 @@
                 isLoading = true;
                 const fd = new FormData(e.target);
                 const data = Object.fromEntries(fd.entries());
-                console.log(data);
 
                 try {
                     const res = await fetch(`${URL}/login`, {
@@ -50,7 +49,6 @@
                         },
                         body: JSON.stringify(data),
                     });
-                    console.log(res.status);
 
                     if (!res.ok) {
                         err = true;

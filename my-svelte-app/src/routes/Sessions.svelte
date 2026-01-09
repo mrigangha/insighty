@@ -42,7 +42,6 @@
             alert("Unable to delete");
             return;
         }
-        console.log("Deleted");
         sessions = sessions.filter((session) => session.id !== sessionId);
     }
 
@@ -71,7 +70,6 @@
             }
             const data = await response.json();
             sessions = data["sessions"];
-            console.log($state.snapshot(sessions));
             if (getDirectOpenSession()) {
                 for (let i = 0; i < sessions.length; i++) {
                     if (sessions[i].id === getLeadVisitorId()) {

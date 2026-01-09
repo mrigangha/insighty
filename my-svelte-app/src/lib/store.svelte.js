@@ -110,7 +110,6 @@ export async function refreshAccessToken() {
   });
   if (resp.ok) {
     const data = await resp.json();
-    console.log(data);
     setAccessToken(data.access_token);
     return true;
   } else {
@@ -134,4 +133,17 @@ export async function logout() {
     setAccessToken("");
     push("/");
   }
+}
+
+let LoggedInUser = $state({
+  name: "",
+  email: "",
+});
+
+export function setLoggedInUser(name, email) {
+  LoggedInUser = { name, email };
+}
+
+export function getLoggedInUser() {
+  return LoggedInUser;
 }
