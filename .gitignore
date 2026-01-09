@@ -8,7 +8,7 @@ secrets.json
 # Dependencies
 /my-svelte-app/node_modules/
 venv/
-/backend/__pycache__/
+/backend/__pycache__/*.pyc
 
 # Build outputs
 dist/

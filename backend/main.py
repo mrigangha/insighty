@@ -1,6 +1,7 @@
 import hashlib
 import hmac
 import json
+import os
 from contextlib import asynccontextmanager
 from typing import Optional
 
@@ -18,6 +19,7 @@ from auth import (
 )
 from bson import ObjectId
 from database import Base, SessionLocal, engine
+from dotenv import load_dotenv
 from fastapi import Cookie, Depends, FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
@@ -30,7 +32,15 @@ from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifetime(app: FastAPI):
+    load_dotenv()
+    print(os.getenv("POSTGRESS_URL"))
+    yield
+
+
+app = FastAPI(lifespan=lifetime)
 Base.metadata.create_all(bind=engine)
 razorpay_client = razorpay.Client(
     auth=("rzp_test_RznNlAeuXL0d3K", "quzU643RrL3EC6pEbQHzOUc3")
