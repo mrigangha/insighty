@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 
 from pydantic import BaseModel, Field
@@ -74,9 +75,6 @@ class LeadRead(BaseModel):
 class SessionCreate(BaseModel):
     session_id: str
     tracking_key: str
-
-
-from datetime import datetime
 
 
 class VisitorEventIn(BaseModel):
