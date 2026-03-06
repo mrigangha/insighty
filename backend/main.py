@@ -1,6 +1,7 @@
 import hashlib
 import hmac
 import json
+import os
 from contextlib import asynccontextmanager
 from typing import Optional
 
@@ -18,6 +19,7 @@ from auth import (
 )
 from bson import ObjectId
 from database import Base, SessionLocal, engine
+from dotenv import load_dotenv
 from fastapi import Cookie, Depends, FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
@@ -30,7 +32,15 @@ from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifetime(app: FastAPI):
+    load_dotenv()
+    print(os.getenv("POSTGRESS_URL"))
+    yield
+
+
+app = FastAPI(lifespan=lifetime)
 Base.metadata.create_all(bind=engine)
 razorpay_client = razorpay.Client(
     auth=("rzp_test_RznNlAeuXL0d3K", "quzU643RrL3EC6pEbQHzOUc3")
@@ -240,6 +250,11 @@ def register(data: schemas.UserCreate, db: Session = Depends(get_db)):
     return {"message": "User created"}
 
 
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
+
 @app.get("/refresh")
 def get_me(user_id: int = Depends(get_current_user), db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.id == user_id).first()
@@ -285,6 +300,40 @@ def login(data: schemas.UserLogin, db: Session = Depends(get_db)):
 security = HTTPBearer()
 
 
+@app.post("/initpayment_Basic")
+def payment_status_Basic(
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+    db: Session = Depends(get_db),
+):
+    token = credentials.credentials
+    payload = decode_token(token)
+    user_id = payload["sub"]
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=401, detail="User not found")
+    user.payment_status = "Basic_PaymentOrder"
+    db.commit()
+    db.refresh(user)
+    return {"status": user.payment_status}
+
+
+@app.post("/initpayment_Pro")
+def payment_status_Pro(
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+    db: Session = Depends(get_db),
+):
+    token = credentials.credentials
+    payload = decode_token(token)
+    user_id = payload["sub"]
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=401, detail="User not found")
+    user.payment_status = "Premium_PaymentOrder"
+    db.commit()
+    db.refresh(user)
+    return {"status": user.payment_status}
+
+
 @app.post("/paymentorder")  # Changed to POST
 def create_order(
     order_data: schemas.OrderRequest,
@@ -320,6 +369,7 @@ def create_order(
         )
 
         # Return formatted response
+        user.plan = order_data.plan
         user.order_id = order["id"]
         user.payment_id = order["id"]
         db.commit()
@@ -446,15 +496,14 @@ def profile(
         raise HTTPException(status_code=404, detail="User not found")
     pricing = user.pricing_tier
     if not user.is_verified:
-        user.pricing_tier = "Free"
-        db.commit()
-        db.refresh(user)
         pricing = "Free"
     return {
         "user_id": user.id,
         "name": user.name,
         "email": user.email,
         "plan": pricing,
+        "payment_status": user.is_verified,
+        "original_plan": user.pricing_tier,
     }
 
 

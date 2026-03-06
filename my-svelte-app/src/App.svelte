@@ -17,6 +17,7 @@
     import Leads from "./routes/Leads.svelte";
     import Project from "./routes/Project.svelte";
     import Pricing from "./routes/Pricing.svelte";
+    import Payment from "./routes/Payment.svelte";
 
     const routes = {
         "/": Home,
@@ -27,6 +28,7 @@
         "/leads": Leads,
         "/projects": Project,
         "/pricing": Pricing,
+        "/pay": Payment,
     };
 
     // Define pages where the footer SHOULD be visible

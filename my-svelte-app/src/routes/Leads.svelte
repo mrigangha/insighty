@@ -94,8 +94,6 @@
             alert(data.detail || "Failed to link session");
             return;
         }
-        console.log(data["visitor_session_id"]);
-        console.log(leads);
         leads.leads[index] = {
             ...leads.leads[index],
             visitor_session_id: data.visitor_session_id,
@@ -125,7 +123,6 @@
                 return;
             }
             leads = await response.json();
-            console.log(leads);
         } catch (e) {
             console.error(e);
         } finally {

@@ -44,7 +44,6 @@
 
     /* ---------- effect: fetch + render ---------- */
     onMount(async () => {
-        console.log("SessionData.svelte mounted");
         if (!graphCanvas) return;
 
         if (!getLoggedIn()) {
@@ -73,10 +72,8 @@
         }
 
         const data = await res.json();
-        console.log(data);
         const events = data.session ?? [];
         if (events.length === 0) {
-            console.log("No events found");
             loading = false;
             return;
         }
@@ -250,11 +247,8 @@
         keyInsight = calculateKeyInsight();
 
         loading = false;
-        console.log("Hello");
     });
-    $effect(() => {
-        console.log(loading);
-    });
+    $effect(() => {});
 
     /* Refined colors for better UI visuals */
     let intentBadge = $derived.by(() => {
