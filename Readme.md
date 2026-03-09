@@ -111,9 +111,6 @@ npm run dev
 
 ---
 
-## License
-
-MIT License © [Your Name]
 
 ---
 
